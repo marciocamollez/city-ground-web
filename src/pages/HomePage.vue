@@ -6,10 +6,11 @@
     <p v-else-if="error">{{ error }}</p>
 
     <div v-else>
-      <article v-for="post in posts" :key="post.id">
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.slug }}</p>
-      </article>
+      <PostCard
+        v-for="post in posts"
+        :post="post"
+        :key="post.id"
+      />
     </div>
   </main>
 </template>
@@ -18,6 +19,7 @@
 import { ref, onMounted } from 'vue';
 import type { Post } from '../types/post';
 import { blogService } from '../services/blog.service';
+import PostCard from '../components/PostCard.vue';
 
 const posts = ref<Post[]>([]);
 const loading = ref(true);
