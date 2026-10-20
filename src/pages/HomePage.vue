@@ -37,26 +37,40 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import type { Post } from '../types/post';
 import type { Pagination } from '../types/pagination';
 import { blogService } from '../services/blog.service';
 import PostCard from '../components/PostCard.vue';
 
+const route = useRoute();
+const router = useRouter();
+
 const posts = ref<Post[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
-const currentPage = ref(1);
+const currentPage = ref(getPageFromUrl())
 const pagination = ref<Pagination | null>(null);
 const perPage = 10;
+
+function getPageFromUrl(): number {
+  const page = Number(route.query.page)
+
+  return Number.isInteger(page) && page > 0 ? page : 1
+}
 
 function changePage(page: number) {
   if (page < 1 || page === currentPage.value) {
     return
   }
 
-  currentPage.value = page
-  loadPosts()
+  router.push({
+    query: {
+      ...route.query,
+      page: page > 1 ? String(page) : undefined,
+    },
+  })
 }
 
 async function loadPosts() {
@@ -78,5 +92,12 @@ async function loadPosts() {
   }
 }
 
-onMounted(loadPosts)
+watch(
+  () => route.query.page,
+  () => {
+    currentPage.value = getPageFromUrl()
+    loadPosts()
+  },
+  { immediate: true },
+)
 </script>
