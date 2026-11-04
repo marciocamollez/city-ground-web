@@ -2,6 +2,13 @@
   <main>
     <h1>Home Page</h1>
 
+    <input
+      v-model="searchInput"
+      type="search"
+      placeholder="Buscar artigos..."
+      aria-label="Buscar artigos"
+    />
+
     <p v-if="loading">Carregando posts...</p>
     <p v-else-if="error">{{ error }}</p>
 
@@ -54,6 +61,12 @@ const currentPage = ref(getPageFromUrl())
 const pagination = ref<Pagination | null>(null);
 const perPage = 10;
 
+const searchInput = ref(
+  typeof route.query.search === 'string'
+    ? route.query.search
+    : '',
+)
+
 function getPageFromUrl(): number {
   const page = Number(route.query.page)
 
@@ -73,7 +86,7 @@ function changePage(page: number) {
   })
 }
 
-async function loadPosts() {
+async function loadPosts(search?: string) {
   loading.value = true
   error.value = null
 
@@ -81,6 +94,7 @@ async function loadPosts() {
     const result = await blogService.getPosts(
       currentPage.value,
       perPage,
+      search,
     )
 
     posts.value = result.items
@@ -93,11 +107,38 @@ async function loadPosts() {
 }
 
 watch(
-  () => route.query.page,
+  [
+    () => route.query.page,
+    () => route.query.search,
+  ],
   () => {
     currentPage.value = getPageFromUrl()
-    loadPosts()
+
+    const search =
+      typeof route.query.search === 'string'
+        ? route.query.search
+        : ''
+
+    searchInput.value = search
+
+    loadPosts(search || undefined)
   },
   { immediate: true },
 )
+
+watch(searchInput, (newValue, _, onCleanup) => {
+  const timeout = window.setTimeout(() => {
+    router.replace({
+      query: {
+        ...route.query,
+        page: undefined,
+        search: newValue.trim() || undefined,
+      },
+    })
+  }, 400)
+
+  onCleanup(() => {
+    window.clearTimeout(timeout)
+  })
+})
 </script>
