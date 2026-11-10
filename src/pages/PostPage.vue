@@ -168,4 +168,52 @@ watch(
     font-size: 16px;
   }
 }
+
+/* Imagens dentro do artigo */
+.post-content :deep(figure) {
+  margin: 32px 0;
+}
+
+.post-content :deep(img) {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Legendas */
+.post-content :deep(figcaption) {
+  margin-top: 8px;
+  color: #777;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Títulos dentro do artigo */
+.post-content :deep(h2) {
+  margin: 36px 0 16px;
+  font-size: 28px;
+  line-height: 1.3;
+}
+
+.post-content :deep(h3) {
+  margin: 28px 0 12px;
+  font-size: 22px;
+}
+
+/* Links */
+.post-content :deep(a) {
+  color: #26734d;
+  text-decoration: underline;
+}
+
+/* Citações */
+.post-content :deep(blockquote) {
+  margin: 28px 0;
+  padding: 12px 20px;
+  border-left: 4px solid #26734d;
+  background: #f5f8f6;
+  font-style: italic;
+}
+
 </style>
