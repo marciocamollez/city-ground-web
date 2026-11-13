@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-
+import PostImage from './PostImage.vue'
 import type { Post } from '../types/post'
 
 const props = defineProps<{
@@ -27,16 +27,13 @@ const formattedDate = computed(() => {
       class="post-link"
     >
       <div class="post-image">
-        <img
-          v-if="post.featuredImage"
+        <PostImage
           :src="post.featuredImage"
           :alt="post.title"
           loading="lazy"
         />
 
-        <div v-else class="image-placeholder">
-          CITY GROUND BRASIL
-        </div>
+
       </div>
 
       <div class="post-info">
@@ -74,6 +71,7 @@ const formattedDate = computed(() => {
 }
 
 .post-image {
+  position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
@@ -81,30 +79,11 @@ const formattedDate = computed(() => {
   background: #eee;
 }
 
-.post-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
-}
 
 .post-card:hover .post-image img {
   transform: scale(1.04);
 }
 
-.image-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #b51e2b;
-  color: white;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
 
 .post-info {
   padding-top: 14px;

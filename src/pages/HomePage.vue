@@ -59,15 +59,13 @@
             class="featured-link"
           >
             <div class="featured-image">
-              <img
-                v-if="posts[0].featuredImage"
+              <PostImage
                 :src="posts[0].featuredImage"
                 :alt="posts[0].title"
+                loading="eager"
               />
 
-              <div v-else class="image-placeholder">
-                CITY GROUND BRASIL
-              </div>
+
             </div>
 
             <div class="featured-info">
@@ -137,6 +135,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
+import PostImage from '../components/PostImage.vue'
 
 import type { Post } from '../types/post'
 import type { Pagination } from '../types/pagination'
@@ -396,6 +395,7 @@ void loadCategories()
 }
 
 .featured-image {
+  position: relative;
   min-height: 350px;
   overflow: hidden;
   background: #b51e2b;
