@@ -80,6 +80,9 @@
               </div>
 
               <h2>{{ posts[0].title }}</h2>
+              <p class="featured-excerpt">
+                {{ getExcerpt(posts[0].excerpt) }}
+              </p>
 
               <time :datetime="posts[0].date">
                 {{ formatDate(posts[0].date) }}
@@ -295,6 +298,16 @@ watch(selectedCategory, (categorySlug) => {
     },
   })
 })
+
+function getExcerpt(excerpt: string): string {
+  const cleanExcerpt = excerpt
+    .replace(/<[^>]*>/g, '')
+    .replace(/&hellip;/g, '…')
+    .replace(/&#215;/g, '×')
+    .trim()
+
+  return cleanExcerpt
+}
 
 void loadCategories()
 </script>
@@ -602,5 +615,17 @@ void loadCategories()
   .pagination span {
     font-size: 12px;
   }
+}
+
+.featured-excerpt {
+  margin: 0 0 18px;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.7;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>
